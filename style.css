@@ -3,6 +3,8 @@
   box-sizing: border-box;
   width: 100%;
   height: 120px;
+  background-image: linear-gradient(#ffffff, #ecfcf5);
+  border-down-color: border-bottom: 5px solid #455657;
 }
 
 .box {
