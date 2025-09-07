@@ -3,11 +3,11 @@ header {
   box-sizing: border-box;
   width: 100%;
   height: 120px;
-  background: #dafcf5;
+  background-color: #dafcf5;
 }
 
 body {
-background: #cefcf5;
+background-color: #cefcf5;
 }
 
 .box {
