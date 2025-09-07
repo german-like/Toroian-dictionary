@@ -10,6 +10,10 @@ body {
 background-color: #f5fcfc;
 }
 
+a {
+  color: #000;
+}
+
 .box {
   box-sizing: border-box;
 }
