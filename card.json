@@ -1,0 +1,23 @@
+{
+  "cards": [
+    {
+      "spelling": "example",
+      "pronunciation": "/ɪɡˈzæmpəl/",
+      "tags": ["basic", "noun"],
+      "meanings": [
+        { "part_of_speech": "noun", "definition": "A representative form or pattern." }
+      ],
+      "related": ["sample", "instance"]
+    },
+    {
+      "spelling": "develop",
+      "pronunciation": "/dɪˈvɛləp/",
+      "tags": ["verb"],
+      "meanings": [
+        { "part_of_speech": "verb", "definition": "To grow or cause to grow." },
+        { "part_of_speech": "verb", "definition": "To create or produce something." }
+      ],
+      "related": ["advance", "improve"]
+    }
+  ]
+}
