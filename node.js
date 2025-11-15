@@ -1,34 +1,7 @@
         // サンプルJSON
-        const data = {
-            "entry": [
-                {
-                    "id": "1",
-                    "headword": "走る",
-                    "pronunciation": "はしる",
-                    "part_of_speech": "動詞",
-                    "definitions": [
-                        {
-                            "sense_id": "1",
-                            "definition": "足を使って速く移動すること",
-                            "examples": ["彼は公園で走っている。", "毎朝5キロ走る。"]
-                        }
-                    ],
-                    "conjugation": {
-                        "base": "走る",
-                        "forms": {
-                            "ます形": "走ります",
-                            "て形": "走って"
-                        }
-                    },
-                    "related_words": {
-                        "synonyms": ["駆ける"],
-                        "antonyms": ["歩く"],
-                        "derived": ["走者"]
-                    },
-                    "tags": ["一般動詞"]
-                }
-            ]
-        };
+        import jsonFile from './data.json' assert { type: 'json' };
+
+        const data = jsonFile;
 
         const container = document.getElementById("dictionary");
 
