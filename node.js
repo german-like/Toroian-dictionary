@@ -17,7 +17,8 @@
             e.definitions.forEach(d => {
                 const defDiv = document.createElement("div");
                 defDiv.classList.add("definition");
-                defDiv.innerHTML = `<strong>意味:</strong> ${d.definition}`;
+                defDiv.innerHTML = `<strong>訳語:</strong> ${d.definition}`;
+                defDiv.innerHTML = `<strong>語義:</strong> ${d.sense}`;
                 if (d.examples.length > 0) {
                     const examplesDiv = document.createElement("div");
                     examplesDiv.classList.add("examples");
