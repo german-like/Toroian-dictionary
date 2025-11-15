@@ -1,0 +1,78 @@
+        // サンプルJSON
+        const data = {
+            "entry": [
+                {
+                    "id": "1",
+                    "headword": "走る",
+                    "pronunciation": "はしる",
+                    "part_of_speech": "動詞",
+                    "definitions": [
+                        {
+                            "sense_id": "1",
+                            "definition": "足を使って速く移動すること",
+                            "examples": ["彼は公園で走っている。", "毎朝5キロ走る。"]
+                        }
+                    ],
+                    "conjugation": {
+                        "base": "走る",
+                        "forms": {
+                            "ます形": "走ります",
+                            "て形": "走って"
+                        }
+                    },
+                    "related_words": {
+                        "synonyms": ["駆ける"],
+                        "antonyms": ["歩く"],
+                        "derived": ["走者"]
+                    },
+                    "tags": ["一般動詞"]
+                }
+            ]
+        };
+
+        const container = document.getElementById("dictionary");
+
+        data.entry.forEach(e => {
+            const entryDiv = document.createElement("div");
+            entryDiv.classList.add("entry");
+
+            entryDiv.innerHTML = `
+                <div class="headword">${e.headword}<span class="pronunciation">[${e.pronunciation}]</span></div>
+                <div class="part-of-speech">${e.part_of_speech}</div>
+            `;
+
+            e.definitions.forEach(d => {
+                const defDiv = document.createElement("div");
+                defDiv.classList.add("definition");
+                defDiv.innerHTML = `<strong>意味:</strong> ${d.definition}`;
+                if (d.examples.length > 0) {
+                    const examplesDiv = document.createElement("div");
+                    examplesDiv.classList.add("examples");
+                    examplesDiv.innerHTML = `<strong>例:</strong> ${d.examples.join(", ")}`;
+                    defDiv.appendChild(examplesDiv);
+                }
+                entryDiv.appendChild(defDiv);
+            });
+
+            // 活用
+            const conjugationDiv = document.createElement("div");
+            conjugationDiv.classList.add("conjugation");
+            conjugationDiv.innerHTML = `<strong>活用:</strong> ${JSON.stringify(e.conjugation.forms)}`;
+            entryDiv.appendChild(conjugationDiv);
+
+            // 関連語
+            const relatedDiv = document.createElement("div");
+            relatedDiv.classList.add("related-words");
+            relatedDiv.innerHTML = `<strong>関連語:</strong> 同義語(${e.related_words.synonyms.join(", ")}), 反意語(${e.related_words.antonyms.join(", ")}), 派生語(${e.related_words.derived.join(", ")})`;
+            entryDiv.appendChild(relatedDiv);
+
+            // タグ
+            if (e.tags.length > 0) {
+                const tagsDiv = document.createElement("div");
+                tagsDiv.classList.add("tags");
+                tagsDiv.innerHTML = `<strong>タグ:</strong> ${e.tags.join(", ")}`;
+                entryDiv.appendChild(tagsDiv);
+            }
+
+            container.appendChild(entryDiv);
+        });
