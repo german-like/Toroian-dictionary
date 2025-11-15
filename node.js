@@ -39,15 +39,15 @@ function render() {
 
     const conjugationDiv = document.createElement("div");
     conjugationDiv.classList.add("conjugation");
-    conjugationDiv.innerHTML = `<strong>活用:</strong> ${JSON.stringify(e.conjugation.forms)}`;
+    conjugationDiv.innerHTML = `<strong>活用:</strong> ${JSON.stringify(e.conjugation.forms.join(", "))}`;
     entryDiv.appendChild(conjugationDiv);
 
     const relatedDiv = document.createElement("div");
     relatedDiv.classList.add("related-words");
     relatedDiv.innerHTML =
-      `<strong>関連語:</strong> 同義語(${e.related_words.synonyms.join(", ")}), ` +
-      `反意語(${e.related_words.antonyms.join(", ")}), ` +
-      `派生語(${e.related_words.derived.join(", ")})`;
+      `<strong>関連語:</strong> 同義語${e.related_words.synonyms.join(", ")}, ` +
+      `反意語${e.related_words.antonyms.join(", ")}, ` +
+      `派生語${e.related_words.derived.join(", ")}`;
     entryDiv.appendChild(relatedDiv);
 
     if (e.tags.length > 0) {
