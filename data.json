@@ -1,4 +1,35 @@
-[
-  { "word": "apple", "meaning": "りんご", "example": "I ate an apple." },
-  { "word": "book",  "meaning": "本",    "example": "This is a book." }
-]
+{
+            "entry": [
+                {
+                    "id": "1",
+                    "headword": "ja",
+                    "pronunciation": "ˈja",
+                    "part_of_speech": "代名詞",
+                    "definitions": [
+                        {
+                            "sense_id": "11",
+                            "definition": "私",
+                            "sense": "一人称単数代名詞。",
+                            "examples": ["Ja emr Karl."]
+                        }
+                    ],
+                    "conjugation": {
+                        "base": "Ja",
+                        "forms": {
+                            "対格": "Me",
+                            "与格": "Mi"
+                            "属格": "Moi",
+                            "処格": "Mus"
+                            "奪格": "Med"
+                            "具格": "Man",
+                        }
+                    },
+                    "related_words": {
+                        "synonyms": ["żig"],
+                        "antonyms": [],
+                        "derived": []
+                    },
+                    "tags": ["男性名詞"]
+                }
+            ]
+}
