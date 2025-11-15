@@ -16,7 +16,7 @@ function render() {
     entryDiv.classList.add("entry");
 
     entryDiv.innerHTML = `
-      <div class="headword">${e.headword}<span class="pronunciation">[${e.pronunciation}]</span></div>
+      <div class="headword">${e.headword}<span class="pronunciation">/${e.pronunciation}/</span></div>
       <div class="part-of-speech">${e.part_of_speech}</div>
     `;
 
