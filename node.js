@@ -1,7 +1,23 @@
         // サンプルJSON
-        import jsonFile from './data.json' assert { type: 'json' };
+        let data = null;
 
-        const data = jsonFile;
+        fetch("data.json")
+          .then(res => res.json())
+          .then(json => {
+            data = json;
+            render();
+          });
+
+        function render() {
+          const container = document.getElementById("dictionary");
+          container.innerHTML = "";
+
+          data.entry.forEach(e => {
+            const div = document.createElement("div");
+            div.textContent = e.headword + " — " + e.part_of_speech;
+            container.appendChild(div);
+          });
+        }
 
         const container = document.getElementById("dictionary");
 
