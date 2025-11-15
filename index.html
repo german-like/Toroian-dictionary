@@ -2,20 +2,61 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Document </title>
-  <link rel="stylesheet" href="reset.css">
-  <link rel="stylesheet" href="style.css">
+  <title>My Dictionary</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #results div { padding: 6px 0; border-bottom: 1px solid #ddd; }
+    #entry-title { font-weight: bold; font-size: 1.3em; }
+  </style>
 </head>
+
 <body>
-<div class="container">
-  <header class="header">
-  </header>
-  <main class="main">
-  </main>
-  <footer class="footer">
-  </footer>
-</div>
+  <h1>Dictionary</h1>
+
+  <!-- 検索フォーム -->
+  <input id="searchBox" type="text" placeholder="検索…" style="width: 250px;">
+  <button onclick="search()">検索</button>
+
+  <!-- 結果一覧 -->
+  <h2>結果</h2>
+  <div id="results"></div>
+
+  <!-- 単語詳細 -->
+  <h2>詳細</h2>
+  <div id="detail"></div>
+
+  <script>
+    let dict = [];
+
+    // 起動時に JSON 読み込み
+    fetch("dict.json")
+      .then(res => res.json())
+      .then(data => dict = data);
+
+    function search() {
+      const q = document.getElementById("searchBox").value.trim();
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+
+      // 部分一致検索
+      const hits = dict.filter(e => e.word.includes(q));
+
+      hits.forEach(entry => {
+        const item = document.createElement("div");
+        item.textContent = entry.word + " – " + entry.meaning;
+        item.onclick = () => showDetail(entry);
+        results.appendChild(item);
+      });
+    }
+
+    function showDetail(entry) {
+      const detail = document.getElementById("detail");
+      detail.innerHTML = `
+        <div id="entry-title">${entry.word}</div>
+        <div>${entry.meaning}</div>
+        <div>${entry.example ?? ""}</div>
+      `;
+    }
+  </script>
 </body>
 </html>
