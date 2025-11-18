@@ -1,15 +1,15 @@
 function searchWord() {
   const q = document.getElementById("search").value.trim().toLowerCase();
+  const resultArea = document.getElementById("result");
+  resultArea.innerHTML = "";
 
-  // ★検索欄が空なら一覧にする！
+  // 検索欄が空なら全単語一覧
   if (q === "") {
     listAllWords();
     return;
   }
 
-  const resultArea = document.getElementById("result");
-  resultArea.innerHTML = "";
-
+  // 検索
   const matches = WORDS.filter(w =>
     w.word.toLowerCase().includes(q)
   );
@@ -18,33 +18,25 @@ function searchWord() {
     resultArea.innerHTML = "<p>単語が見つかりません。</p>";
     return;
   }
-}
 
-  WORDS.forEach(w => {
-    const ipa = `
-      <p><b>発音（IPA）：</b> ${w.pronunciation ?? "なし"}</p>`;
-
+  // 検索結果のみループ
+  matches.forEach(w => {
+    const ipa = `<p><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
     const classInfo = `
       <p><b>品詞：</b> ${w.class?.pos ?? "?"}</p>
       <p><b>分類：</b> ${w.class?.subclass ?? "-"}</p>
     `;
-
     const meaningsHtml = w.meanings
-      .map(m => {
-        return `
-          <div style="margin-bottom:10px;">
-            <p><b>意味：</b> ${m.gloss}</p>
-            <p>${m.description}</p>
-            <p><b>例文：</b> ${m.example.sentence}</p>
-            <p><i>${m.example.translation}</i></p>
-          </div>
-        `;
-      })
-      .join("");
-
+      .map(m => `
+        <div style="margin-bottom:10px;">
+          <p><b>意味：</b> ${m.gloss}</p>
+          <p>${m.description}</p>
+          <p><b>例文：</b> ${m.example.sentence}</p>
+          <p><i>${m.example.translation}</i></p>
+        </div>
+      `).join("");
     const synonyms = w.synonyms?.length ? w.synonyms.join(", ") : "なし";
     const antonyms = w.antonyms?.length ? w.antonyms.join(", ") : "なし";
-
     const tags = w.tags?.length
       ? w.tags.map(t => `<span style="border:1px solid #999;padding:2px 6px;margin-right:4px;border-radius:6px;">${t}</span>`).join("")
       : "-";
