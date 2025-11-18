@@ -1,24 +1,34 @@
 const WORDS = [
   {
-    "word": "salan",
-    "pronunciation": "ˈsalan",
+    "word": "Ja",
+    "pronunciation": {
+      "ipa": "ˈja"
+    },
     "class": {
-      "pos": "greeting",
-      "subclass": "common greeting"
+      "pos": "代名詞"
     },
     "meanings": [
       {
-        "gloss": "こんにちは",
-        "description": "一般的な挨拶。朝昼晩を問わず使用。",
+        "gloss": "私",
+        "description": "一人称単数代名詞",
         "example": {
-          "sentence": "Salan veo!",
-          "translation": "やあ！"
+          "sentence": "Ja din Kaar.",
+          "translation": "私はカールです。"
         }
       }
     ],
-    "synonyms": ["halo", "seran"],
-    "antonyms": [],
-    "tags": ["greeting", "basic"],
-    "updatedAt": "2025-01-01"
+    "conjugations": {
+      "主格": "Ja",
+      "対格": "me",
+      "与格": "mi",
+      "属格": "moi",
+      "処格": "mus",
+      "奪格": "med",
+      "具格": "man",
+    },
+    "synonyms": ["wi"],
+    "antonyms": ["żig"],
+    "tags": ["代名詞"],
+    "updatedAt": "2025-11-18"
   }
 ];
