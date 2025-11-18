@@ -18,6 +18,7 @@ function searchWord() {
     resultArea.innerHTML = "<p>単語が見つかりません。</p>";
     return;
   }
+}
 
   WORDS.forEach(w => {
     const ipa = `
