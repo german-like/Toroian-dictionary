@@ -72,13 +72,13 @@ function displayWords(wordArray) {
         <h2>${w.word}</h2><br>
         ${ipa}<br>
         ${classInfo}<br>
-        <h3>意味</h3>${meaningsHtml}<br>
-        <h3>変化形</h3>${conjugations}<br>
-        <p><b>類義語：</b> ${synonyms}</p><br>
-        <p><b>対義語：</b> ${antonyms}</p><br>
-        <p><b>タグ：</b> ${tags}</p><br>
-        <p><b>最終更新：</b> ${updatedAt}</p><br>
-      </div><br>
+        <div><h3>意味</h3>${meaningsHtml}</div>
+        <div><h3>変化形</h3>${conjugations}</div>
+        <div><b>類義語：</b> ${synonyms}</div>
+        <div><b>対義語：</b> ${antonyms}</div>
+        <div><b>タグ：</b> ${tags}</div>
+        <div><b>最終更新：</b> ${updatedAt}</div>
+      </div>
     `;
   });
 }
