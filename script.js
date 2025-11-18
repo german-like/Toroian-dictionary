@@ -43,9 +43,21 @@ function displayWords(wordArray) {
       `).join("");
 
     const conjugations = w.conjugations
-      ? Object.entries(w.conjugations)
-          .map(([k,v]) => `<p><b>${k}:</b> ${v}</p>`).join("")
-      : "";
+  ? `<table border="1" style="border-collapse: collapse; margin-bottom:10px;">
+      <tr>
+        <th style="padding:4px 8px;">形態</th>
+        <th style="padding:4px 8px;">変化形</th>
+      </tr>
+      ${Object.entries(w.conjugations)
+        .map(([form, value]) => `
+          <tr>
+            <td style="padding:4px 8px;">${form}</td>
+            <td style="padding:4px 8px;">${value}</td>
+          </tr>
+        `)
+        .join("")}
+    </table>`
+  : "";
 
     const synonyms = w.synonyms?.length ? w.synonyms.join(", ") : "なし";
     const antonyms = w.antonyms?.length ? w.antonyms.join(", ") : "なし";
