@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>トロイア語辞書</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .word-card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>トロイア語辞書</h1>
+
+  <input id="search" placeholder="単語を検索…" style="padding:8px;width:250px">
+  <button onclick="searchWord()">検索</button>
+
+  <div id="result"></div>
+
+  <script src="words.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
