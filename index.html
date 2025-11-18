@@ -9,6 +9,11 @@
       padding: 20px; 
       background-color: #cad6e4;
     }
+    .container {
+      width: 100%;
+      height: 200px;
+      display: flex;
+    }
     .word-card {
       border: 1px solid #ddd;
       background-color: #eff0ff;
@@ -25,13 +30,14 @@
   </style>
 </head>
 <body>
+  <div class="container">
   <h1>トロイア語辞書</h1>
   <div class="side">
     <input id="search" placeholder="単語を検索…" style="padding:8px;width:250px">
     <button onclick="searchWord()">検索</button>
   </div>
   <div id="result"></div>
-
+  </div>
   <script src="words.js"></script>
   <script src="script.js"></script>
 </body>
