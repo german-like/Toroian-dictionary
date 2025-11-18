@@ -1,16 +1,13 @@
-// メイン検索関数
 function searchWord() {
   const q = document.getElementById("search").value.trim().toLowerCase();
   const resultArea = document.getElementById("result");
   resultArea.innerHTML = "";
 
-  // 検索欄が空なら全単語一覧
   if (q === "") {
     listAllWords();
     return;
   }
 
-  // 検索
   const matches = WORDS.filter(w =>
     w.word.toLowerCase().includes(q)
   );
@@ -20,31 +17,20 @@ function searchWord() {
     return;
   }
 
-  // 検索結果を表示
   displayWords(matches);
 }
 
-// 全単語を一覧表示する関数
 function listAllWords() {
   displayWords(WORDS);
 }
 
-// 表示用共通関数
 function displayWords(wordArray) {
   const resultArea = document.getElementById("result");
   resultArea.innerHTML = "";
 
   wordArray.forEach(w => {
     const ipa = `<p><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
-    const romanized = `<p><b>ローマナイズ：</b> ${w.pronunciation?.romanized ?? "なし"}</p>`;
-    const audio = w.pronunciation?.audio
-      ? `<audio controls src="${w.pronunciation.audio}"></audio>`
-      : "";
-
-    const classInfo = `
-      <p><b>品詞：</b> ${w.class?.pos ?? "?"}</p>
-      <p><b>分類：</b> ${w.class?.subclass ?? "-"}</p>
-    `;
+    const classInfo = `<p><b>品詞：</b> ${w.class?.pos ?? "?"}</p>`;
 
     const meaningsHtml = w.meanings
       .map(m => `
@@ -56,34 +42,33 @@ function displayWords(wordArray) {
         </div>
       `).join("");
 
+    const conjugations = w.conjugations
+      ? Object.entries(w.conjugations)
+          .map(([k,v]) => `<p><b>${k}:</b> ${v}</p>`).join("")
+      : "";
+
     const synonyms = w.synonyms?.length ? w.synonyms.join(", ") : "なし";
     const antonyms = w.antonyms?.length ? w.antonyms.join(", ") : "なし";
-
     const tags = w.tags?.length
       ? w.tags.map(t => `<span style="border:1px solid #999;padding:2px 6px;margin-right:4px;border-radius:6px;">${t}</span>`).join("")
       : "-";
 
-    const notes = w.notes ?? "-";
     const updatedAt = w.updatedAt ?? "-";
 
     resultArea.innerHTML += `
       <div class="word-card">
         <h2>${w.word}</h2>
         ${ipa}
-        ${romanized}
-        ${audio}
         ${classInfo}
-        <h3>意味</h3>
-        ${meaningsHtml}
+        <h3>意味</h3>${meaningsHtml}
+        <h3>変化形</h3>${conjugations}
         <p><b>類義語：</b> ${synonyms}</p>
         <p><b>対義語：</b> ${antonyms}</p>
         <p><b>タグ：</b> ${tags}</p>
-        <p><b>備考：</b> ${notes}</p>
         <p><b>最終更新：</b> ${updatedAt}</p>
       </div>
     `;
   });
 }
 
-// ページ読み込み時に自動で全単語を表示
 window.onload = listAllWords;
