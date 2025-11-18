@@ -1,18 +1,8 @@
-function searchWord() {
-  const q = document.getElementById("search").value.trim().toLowerCase();
+function listAllWords() {
   const resultArea = document.getElementById("result");
   resultArea.innerHTML = "";
 
-  const matches = WORDS.filter(w => 
-    w.word.toLowerCase().includes(q)
-  );
-
-  if (matches.length === 0) {
-    resultArea.innerHTML = "<p>単語が見つかりません。</p>";
-    return;
-  }
-
-  matches.forEach(w => {
+  WORDS.forEach(w => {
     const pronunciations = `
       <p><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>
       <p><b>ローマナイズ：</b> ${w.pronunciation?.romanized ?? "なし"}</p>
@@ -41,38 +31,26 @@ function searchWord() {
       })
       .join("");
 
-    const synonyms = w.synonyms?.length
-      ? w.synonyms.join(", ")
-      : "なし";
-
-    const antonyms = w.antonyms?.length
-      ? w.antonyms.join(", ")
-      : "なし";
+    const synonyms = w.synonyms?.length ? w.synonyms.join(", ") : "なし";
+    const antonyms = w.antonyms?.length ? w.antonyms.join(", ") : "なし";
 
     const tags = w.tags?.length
       ? w.tags.map(t => `<span style="border:1px solid #999;padding:2px 6px;margin-right:4px;border-radius:6px;">${t}</span>`).join("")
       : "-";
 
-    const notes = w.notes ?? "-";
-    const updatedAt = w.updatedAt ?? "-";
-
     resultArea.innerHTML += `
       <div class="word-card">
         <h2>${w.word}</h2>
-
         ${pronunciations}
         ${classInfo}
-
         <h3>意味</h3>
         ${meaningsHtml}
-
         <p><b>類義語：</b> ${synonyms}</p>
         <p><b>対義語：</b> ${antonyms}</p>
         <p><b>タグ：</b> ${tags}</p>
-
-        <p><b>備考：</b> ${notes}</p>
-        <p><b>最終更新：</b> ${updatedAt}</p>
+        <p><b>備考：</b> ${w.notes ?? "-"}</p>
+        <p><b>最終更新：</b> ${w.updatedAt ?? "-"}</p>
       </div>
     `;
   });
-          }
+}
