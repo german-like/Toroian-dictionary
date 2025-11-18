@@ -1,17 +1,27 @@
-function listAllWords() {
+function searchWord() {
+  const q = document.getElementById("search").value.trim().toLowerCase();
+
+  // ★検索欄が空なら一覧にする！
+  if (q === "") {
+    listAllWords();
+    return;
+  }
+
   const resultArea = document.getElementById("result");
   resultArea.innerHTML = "";
 
+  const matches = WORDS.filter(w =>
+    w.word.toLowerCase().includes(q)
+  );
+
+  if (matches.length === 0) {
+    resultArea.innerHTML = "<p>単語が見つかりません。</p>";
+    return;
+  }
+
   WORDS.forEach(w => {
-    const pronunciations = `
-      <p><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>
-      <p><b>ローマナイズ：</b> ${w.pronunciation?.romanized ?? "なし"}</p>
-      ${
-        w.pronunciation?.audio
-          ? `<audio controls src="${w.pronunciation.audio}"></audio>`
-          : ""
-      }
-    `;
+    const ipa = `
+      <p><b>発音（IPA）：</b> ${w.pronunciation ?? "なし"}</p>`;
 
     const classInfo = `
       <p><b>品詞：</b> ${w.class?.pos ?? "?"}</p>
@@ -41,14 +51,13 @@ function listAllWords() {
     resultArea.innerHTML += `
       <div class="word-card">
         <h2>${w.word}</h2>
-        ${pronunciations}
+        ${ipa}
         ${classInfo}
         <h3>意味</h3>
         ${meaningsHtml}
         <p><b>類義語：</b> ${synonyms}</p>
         <p><b>対義語：</b> ${antonyms}</p>
         <p><b>タグ：</b> ${tags}</p>
-        <p><b>備考：</b> ${w.notes ?? "-"}</p>
         <p><b>最終更新：</b> ${w.updatedAt ?? "-"}</p>
       </div>
     `;
