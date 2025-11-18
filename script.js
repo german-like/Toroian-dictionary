@@ -45,14 +45,14 @@ function displayWords(wordArray) {
     const conjugations = w.conjugations
   ? `<table border="1" style="border-collapse: collapse; margin-bottom:10px;">
       <tr>
-        <th style="padding:4px 8px;">形態</th>
-        <th style="padding:4px 8px;">変化形</th>
+        <th style="padding:4px 8px; background-color:#5a7078; color:#fff;">形態</th>
+        <th style="padding:4px 8px; background-color:#5a7078; color:#fff;">変化形</th>
       </tr>
       ${Object.entries(w.conjugations)
         .map(([form, value]) => `
           <tr>
-            <td style="padding:4px 8px;">${form}</td>
-            <td style="padding:4px 8px;">${value}</td>
+            <td style="padding:4px 8px; background-color:#d5e0e0;">${form}</td>
+            <td style="padding:4px 8px; background-color:#d5e0e0;">${value}</td>
           </tr>
         `)
         .join("")}
