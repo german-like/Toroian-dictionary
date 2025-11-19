@@ -15,6 +15,7 @@
       display: flex;
     }
     .word-card {
+      align: center
       width: 70%;
       border: 1px solid #ddd;
       background-color: #eff0ff;
@@ -23,21 +24,13 @@
       margin-left: 5%;
       border-radius: 8px;
     }
-    .side {
-      width: 30%;
-      background-color: #fff;
-    }
   </style>
 </head>
 <body>
-  <div class="container">
-  <div class="side">
   <h3>トロイア語辞書</h3>
     <input id="search" placeholder="単語を検索…" style="padding:8px;width:250px">
     <button onclick="searchWord()">検索</button>
-  </div>
   <div id="result"></div>
-  </div>
   <script src="words.js"></script>
   <script src="script.js"></script>
 </body>
