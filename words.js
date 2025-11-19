@@ -30,7 +30,7 @@ const WORDS = [
     "antonyms": [""],
     "tags": ["代名詞"],
     "updatedAt": "2025-11-18"
-  }
+  },
   {
     "word": "żig",
     "pronunciation": {
