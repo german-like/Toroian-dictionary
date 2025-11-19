@@ -29,8 +29,8 @@ function displayWords(wordArray) {
   resultArea.innerHTML = "";
 
   wordArray.forEach(w => {
-    const ipa = `<p class="stat1"><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
-    const classInfo = `<p class="stat1"><b>品詞：</b> ${w.class?.pos ?? "?"}</p>`;
+    const ipa = `<p class="stat_a"><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
+    const classInfo = `<p class="stat_a"><b>品詞：</b> ${w.class?.pos ?? "?"}</p>`;
 
     const meaningsHtml = w.meanings
       .map(m => `
