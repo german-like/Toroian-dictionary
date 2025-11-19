@@ -29,8 +29,8 @@ function displayWords(wordArray) {
   resultArea.innerHTML = "";
 
   wordArray.forEach(w => {
-    const ipa = `<p><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
-    const classInfo = `<p><b>品詞：</b> ${w.class?.pos ?? "?"}</p>`;
+    const ipa = `<p class="stat1"><b>発音（IPA）：</b> ${w.pronunciation?.ipa ?? "なし"}</p>`;
+    const classInfo = `<p class="stat1"><b>品詞：</b> ${w.class?.pos ?? "?"}</p>`;
 
     const meaningsHtml = w.meanings
       .map(m => `
@@ -69,9 +69,7 @@ function displayWords(wordArray) {
 
     resultArea.innerHTML += `
       <div class="word-card">
-        <h2>${w.word}</h2><br>
-        ${ipa}<br>
-        ${classInfo}<br>
+        <h2>${w.word}</h2>${ipa}${classInfo}
         <div><h3>意味</h3>${meaningsHtml}</div>
         <div><h3>変化形</h3>${conjugations}</div>
         <div><b>類義語：</b> ${synonyms}</div>
