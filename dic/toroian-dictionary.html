@@ -34,7 +34,7 @@
   <script src="script.js"></script>
   <script>
     // ★ ページロード時に dictionary.txt を読み込む
-    fetch("dictionary.txt")
+    fetch("data.txt")
       .then(res => res.text())
       .then(text => {
       loadDictionaryFromText(text);   // ← これだけでOK
