@@ -1,19 +1,11 @@
-@2025-01-24
-#walk [動詞]
--歩く
-C:地面から足が離れないよう進むこと。
-E:I'm walking.
-F:過去:walked,現在:walking,三単現:walks
-N:lは[ʊ]と読む。
-S:stroll
-A:run
-T:動作
----
-@2025-01-20
-#hello [間投詞]
--こんにちは
--やあ
-C:挨拶の表現
-E:Hello!
-N:カジュアル
+@2025-11/20
+#Ja [代名詞]
+-私
+C:一人称単数代名詞。
+E:Ja biz Kaar.
+F:主格:Ja,対格:me,与格:mi,属格:moi,処格:mus,奪格:med,具格:mag
+N:
+S:żig
+A:
+T:代名詞
 ---
