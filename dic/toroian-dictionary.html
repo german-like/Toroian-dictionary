@@ -32,5 +32,13 @@
   <div id="result"></div>
   <script src="words.js"></script>
   <script src="script.js"></script>
+  <script>
+    // ★ ページロード時に dictionary.txt を読み込む
+    fetch("dictionary.txt")
+      .then(res => res.text())
+      .then(text => {
+      loadDictionaryFromText(text);   // ← これだけでOK
+     });
+  </script>
 </body>
 </html>
