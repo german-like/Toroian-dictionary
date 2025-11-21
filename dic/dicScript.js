@@ -116,11 +116,12 @@ function renderEntry(w) {
       <p><b>作成日：</b>${w.createdAt}</p>
     </div>
     <div class="bottom">
-    <p class="tce">${w.translations.map(t => `<li>${t}</li>`).join("")}</p>
-
-      <p class="tce">${w.comments.map(c => `<li>${c}</li>`).join("")}</p>
-
-      <p class="tce">${w.examples.map(e => `<li>${e}</li>`).join("")}</p>
+      <p class="htext">訳語</p>
+      <p class="tce">${w.translations.map(t => `<p>${t}</p>`).join("")}</p>
+      <p class="htext">語義</p>
+      <p class="tce">${w.comments.map(c => `<p>${c}</p>`).join("")}</p>
+      <p class="htext">例文</p>
+      <p class="tce">${w.examples.map(e => `<p>${e}</p>`).join("")}</p>
 
       ${infHtml}
 
