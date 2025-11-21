@@ -164,4 +164,4 @@ function renderEntry(entry) {
     p.push(`<p><b>タグ：</b> ${entry.tags.join(", ")}</p>`);
 
   result.innerHTML = `<div class="word-card">${p.join("\n")}</div>`;
-          }
+}
