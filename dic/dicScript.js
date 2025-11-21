@@ -111,25 +111,22 @@ function renderEntry(w) {
 
   result.innerHTML += `
     <div class="word-card">
-      <h2>${w.headword}</h2> <div class="pos">${w.pos}</div>
+      <h2>${w.headword}</h2>
+      <div class="pos">${w.pos}</div>
       <p><b>作成日：</b>${w.createdAt}</p>
 
-      <h3>訳語</h3>
-      <ul>${w.translations.map(t => `<li>${t}</li>`).join("")}</ul>
+      <p class="tce">${w.translations.map(t => `<li>${t}</li>`).join("")}</p>
 
-      <h3>説明</h3>
-      <ul>${w.comments.map(c => `<li>${c}</li>`).join("")}</ul>
+      <p class="tce">${w.comments.map(c => `<li>${c}</li>`).join("")}</p>
 
-      <h3>例文</h3>
-      <ul>${w.examples.map(e => `<li>${e}</li>`).join("")}</ul>
+      <p class="tce">${w.examples.map(e => `<li>${e}</li>`).join("")}</p>
 
-      <h3>変化形</h3>
       ${infHtml}
 
-      <p><b>備考：</b>${w.notes || "-"}</p>
-      <p><b>類義語：</b>${w.synonyms.join(", ") || "-"}</p>
-      <p><b>対義語：</b>${w.antonyms.join(", ") || "-"}</p>
-      <p><b>タグ：</b>${w.tags.join(", ") || "-"}</p>
+      <p>備考 ${w.notes || "-"}</p>
+      <p>類義語 ${w.synonyms.join(" ") || "-"}</p>
+      <p>対義語 ${w.antonyms.join(" ") || "-"}</p>
+      <p>タグ ${w.tags.join(" ") || "-"}</p>
     </div>
   `;
 }
