@@ -27,7 +27,7 @@ C:二人称単数代名詞。
 E:
 F:主格:tü,対格:ter,与格:tür,属格:tes,処格:tus,奪格:ted,具格:tog
 N:
-S:tüm
+S:drs
 A:
 T:代名詞
 ---
