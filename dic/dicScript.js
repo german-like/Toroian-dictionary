@@ -1,167 +1,166 @@
-// データ保存（メモリ上）
-let ENTRIES = [];
+// ==========================================================
+//  パーサー（あなたの独自フォーマット対応）
+// ==========================================================
 
-/* --------------------------------------
-   ① 独自フォーマットをパース
---------------------------------------- */
-function parseEntry(text) {
-  const lines = text.split("\n").map(l => l.trim()).filter(l => l !== "");
+function parseDictionaryText(text) {
+  const entries = text
+    .split(/^-{3,}$/m)
+    .map(b => b.trim())
+    .filter(b => b.length > 0);
 
-  const entry = {
-    date: "",
-    headword: "",
-    pos: "",
-    description: "",
-    comment: "",
-    example: "",
-    translation: "",
-    inflections: [],
-    note: "",
-    synonyms: [],
-    antonyms: [],
-    tags: []
-  };
+  return entries.map(parseEntryBlock);
+}
+
+function parseEntryBlock(block) {
+  const lines = block.split("\n").map(l => l.trim());
+
+  let createdAt = "";
+  let headword = "";
+  let pos = "";
+  let translations = [];
+  let comments = [];
+  let examples = [];
+  let inflections = [];
+  let notes = "";
+  let synonyms = [];
+  let antonyms = [];
+  let tags = [];
 
   lines.forEach(line => {
     if (line.startsWith("@")) {
-      entry.date = line.slice(1).trim();
+      createdAt = line.slice(1).trim();
     }
     else if (line.startsWith("#")) {
       const m = line.match(/^#(.+?)\s*\[(.+?)\]/);
       if (m) {
-        entry.headword = m[1].trim();
-        entry.pos = m[2].trim();
+        headword = m[1].trim();
+        pos = m[2].trim();
       } else {
-        entry.headword = line.slice(1);
+        headword = line.slice(1).trim();
       }
     }
     else if (line.startsWith("-")) {
-      entry.description = line.slice(1).trim();
+      translations.push(line.slice(1).trim());
     }
-    else if (line.startsWith("C:")) entry.comment = line.slice(2).trim();
-    else if (line.startsWith("E:")) entry.example = line.slice(2).trim();
-    else if (line.startsWith("T:")) entry.translation = line.slice(2).trim();
-    else if (line.startsWith("N:")) entry.note = line.slice(2).trim();
+    else if (line.startsWith("C:")) {
+      comments.push(line.slice(2).trim());
+    }
+    else if (line.startsWith("E:")) {
+      examples.push(line.slice(2).trim());
+    }
+    else if (line.startsWith("F:")) {
+      const parts = line.slice(2).split(",");
+      parts.forEach(part => {
+        const [type, form] = part.split(":").map(s => s.trim());
+        if (type && form) inflections.push({ type, form });
+      });
+    }
+    else if (line.startsWith("N:")) {
+      notes = line.slice(2).trim();
+    }
     else if (line.startsWith("S:")) {
       const v = line.slice(2).trim();
-      entry.synonyms = v ? v.split(",").map(s => s.trim()) : [];
+      if (v) synonyms = v.split(",").map(s => s.trim());
     }
     else if (line.startsWith("A:")) {
       const v = line.slice(2).trim();
-      entry.antonyms = v ? v.split(",").map(s => s.trim()) : [];
+      if (v) antonyms = v.split(",").map(s => s.trim());
     }
     else if (line.startsWith("T:")) {
       const v = line.slice(2).trim();
-      entry.tags = v ? v.split(",").map(s => s.trim()) : [];
-    }
-    else if (line.startsWith("F:")) {
-      const raw = line.slice(2).trim();
-      raw.split(",").forEach(pair => {
-        const [type, form] = pair.split(":");
-        if (type && form) {
-          entry.inflections.push({
-            type: type.trim(),
-            form: form.trim()
-          });
-        }
-      });
+      if (v) tags = v.split(",").map(s => s.trim());
     }
   });
 
-  return entry;
+  return {
+    createdAt,
+    headword,
+    pos,
+    translations,
+    comments,
+    examples,
+    inflections,
+    notes,
+    synonyms,
+    antonyms,
+    tags
+  };
 }
 
-/* --------------------------------------
-   ② エントリ追加
---------------------------------------- */
-function addEntry() {
-  const text = document.getElementById("entryInput").value.trim();
-  if (!text) return;
+// ==========================================================
+//  表示処理
+// ==========================================================
 
-  const entry = parseEntry(text);
-  if (!entry.headword) {
-    alert("見出し語（#word）が必要です！");
+let WORDS = [];
+
+function displayAll() {
+  const result = document.getElementById("result");
+  result.innerHTML = "";
+  WORDS.forEach(renderEntry);
+}
+
+function renderEntry(w) {
+  const result = document.getElementById("result");
+
+  const infHtml = w.inflections.length
+    ? `<table class="infl">
+         <tr><th>種類</th><th>形</th></tr>
+         ${w.inflections.map(f => `<tr><td>${f.type}</td><td>${f.form}</td></tr>`).join("")}
+       </table>`
+    : "-";
+
+  result.innerHTML += `
+    <div class="word-card">
+      <h2>${w.headword} <span class="pos">[${w.pos}]</span></h2>
+      <p><b>作成日：</b>${w.createdAt}</p>
+
+      <h3>訳語</h3>
+      <ul>${w.translations.map(t => `<li>${t}</li>`).join("")}</ul>
+
+      <h3>説明</h3>
+      <ul>${w.comments.map(c => `<li>${c}</li>`).join("")}</ul>
+
+      <h3>例文</h3>
+      <ul>${w.examples.map(e => `<li>${e}</li>`).join("")}</ul>
+
+      <h3>変化形</h3>
+      ${infHtml}
+
+      <p><b>備考：</b>${w.notes || "-"}</p>
+      <p><b>類義語：</b>${w.synonyms.join(", ") || "-"}</p>
+      <p><b>対義語：</b>${w.antonyms.join(", ") || "-"}</p>
+      <p><b>タグ：</b>${w.tags.join(", ") || "-"}</p>
+    </div>
+  `;
+}
+
+// ==========================================================
+//  検索
+// ==========================================================
+
+function searchWord() {
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  const result = document.getElementById("result");
+  result.innerHTML = "";
+
+  if (q === "") {
+    displayAll();
     return;
   }
 
-  ENTRIES.push(entry);
-  document.getElementById("entryInput").value = "";
-  updateEntryList();
-  alert("追加しました！");
-}
-
-/* --------------------------------------
-   ③ 一覧更新
---------------------------------------- */
-function updateEntryList(list = ENTRIES) {
-  const box = document.getElementById("entryList");
-  box.innerHTML = "";
-
-  list.forEach((e, index) => {
-    const div = document.createElement("div");
-    div.className = "entry-item";
-    div.textContent = `${e.headword} ${e.pos ? "["+e.pos+"]" : ""}`;
-    div.onclick = () => renderEntry(e);
-    box.appendChild(div);
-  });
-}
-
-/* --------------------------------------
-   ④ 検索
---------------------------------------- */
-function searchEntries() {
-  const q = document.getElementById("searchBox").value.trim().toLowerCase();
-  if (!q) {
-    updateEntryList();
-    return;
-  }
-
-  const filtered = ENTRIES.filter(e =>
-    e.headword.toLowerCase().includes(q)
+  const matches = WORDS.filter(w =>
+    w.headword.toLowerCase().includes(q) ||
+    w.translations.some(t => t.includes(q))
   );
 
-  updateEntryList(filtered);
+  matches.forEach(renderEntry);
 }
 
-/* --------------------------------------
-   ⑤ 表示（空欄項目は非表示）
---------------------------------------- */
-function renderEntry(entry) {
-  const result = document.getElementById("result");
-  const p = [];
+// ==========================================================
+//  辞書読み込み（dictionary.txt → parse）
+// ==========================================================
 
-  if (entry.date) p.push(`<p><b>作成日：</b> ${entry.date}</p>`);
-
-  if (entry.headword) {
-    const pos = entry.pos ? `<small>[${entry.pos}]</small>` : "";
-    p.push(`<h2>${entry.headword} ${pos}</h2>`);
-  }
-
-  if (entry.description) p.push(`<p><b>意味：</b> ${entry.description}</p>`);
-  if (entry.comment) p.push(`<p>${entry.comment}</p>`);
-  if (entry.translation) p.push(`<p><b>訳：</b> ${entry.translation}</p>`);
-  if (entry.example) p.push(`<p><b>例文：</b> ${entry.example}</p>`);
-  if (entry.note) p.push(`<p><b>備考：</b> ${entry.note}</p>`);
-
-  if (entry.inflections.length > 0) {
-    const rows = entry.inflections
-      .map(f => `<tr><td>${f.type}</td><td>${f.form}</td></tr>`)
-      .join("");
-
-    p.push(`
-      <b>活用：</b>
-      <table>${rows}</table>
-    `);
-  }
-
-  if (entry.synonyms.length > 0)
-    p.push(`<p><b>類義語：</b> ${entry.synonyms.join(", ")}</p>`);
-
-  if (entry.antonyms.length > 0)
-    p.push(`<p><b>対義語：</b> ${entry.antonyms.join(", ")}</p>`);
-
-  if (entry.tags.length > 0)
-    p.push(`<p><b>タグ：</b> ${entry.tags.join(", ")}</p>`);
-
-  result.innerHTML = `<div class="word-card">${p.join("\n")}</div>`;
+function loadDictionaryFromText(text) {
+  WORDS = parseDictionaryText(text);
+  displayAll();
 }
