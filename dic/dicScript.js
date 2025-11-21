@@ -111,7 +111,7 @@ function renderEntry(w) {
 
   result.innerHTML += `
     <div class="word-card">
-      <h2>${w.headword} <span class="pos">[${w.pos}]</span></h2>
+      <h2>${w.headword}</h2> <div class="pos">${w.pos}</div>
       <p><b>作成日：</b>${w.createdAt}</p>
 
       <h3>訳語</h3>
