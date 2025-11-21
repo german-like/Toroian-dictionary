@@ -110,12 +110,13 @@ function renderEntry(w) {
     : "-";
 
   result.innerHTML += `
-    <div class="word-card">
+    <div class="head">
       <h2>${w.headword}</h2>
       <div class="pos">${w.pos}</div>
       <p><b>作成日：</b>${w.createdAt}</p>
-
-      <p class="tce">${w.translations.map(t => `<li>${t}</li>`).join("")}</p>
+    </div>
+    <div class="bottom">
+    <p class="tce">${w.translations.map(t => `<li>${t}</li>`).join("")}</p>
 
       <p class="tce">${w.comments.map(c => `<li>${c}</li>`).join("")}</p>
 
