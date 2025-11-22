@@ -35,14 +35,25 @@ A:
 T:代名詞
 ---
 @2025-11/21
-#drs [代名詞]
+#das [代名詞]
 -あなたたち
->/ˈdəs/
-C:二人称単数代名詞。
+>/ˈdas/
+C:三人称単数代名詞。
 E:
-F:主格:drs,対格:ders,与格:dur,属格:drus,処格:dus,奪格:ded,具格:dog
+F:主格:das,対格:ders,与格:dur,属格:dus,処格:dus,奪格:dat,具格:dag
 N:
-S:drs
+S:tü
 A:
 T:代名詞
 ---
+@2025-11/21
+#one [代名詞]
+-彼
+>/ˈone/
+C:三人称単数代名詞。
+E:
+F:主格:one,対格:enae,与格:onie,属格:onore,処格:onee,奪格:onüde,具格:onog
+N:
+S:ome
+A:
+T:代名詞
