@@ -30,21 +30,22 @@ table {
 .htext {
       max-width: 75px;
       border-bottom: solid 2px #6c6294;
+      font-weight: bold;
       text-align: right;
 }
 .infl th {
-      background-color: #5c6090; 
+      background-color: #3b5880; 
       color: #fff;
       font-weight: bold; 
       text-align: center; 
-      padding: 3px; 
+      padding: 10px; 
       border: 1px solid #fff; 
 }
 .infl td {
-      background-color: #bcc0f0; 
+      background-color: #f0f1f5; 
       color: #222;
       text-align: center; 
-      padding: 3px; 
+      padding: 10px; 
       border: 1px solid #fff; 
 }
 .pos {
