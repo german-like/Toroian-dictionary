@@ -1,3 +1,38 @@
-.stat_a {
-  white-space: nowrap;
-}
+body { 
+      font-family: sans-serif; 
+      background-color: #7f89b4;
+      width: 50%; 
+      margin: 0 auto; 
+      padding: 20px; 
+    }
+    h1 {
+      text-align: center;
+    }
+    .head {
+      background-color: #6c6294;
+      color: #fff;
+      padding: 20px;
+      margin-top: 20px;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+    }
+    .bottom {
+      box-shadow: 0px 10px 0px #000;
+      background-color: #fafafa;
+      color: #222;
+      padding: 20px;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    .htext {
+      max-width: 75px;
+      border-bottom: solid 2px #6c6294;
+      text-align: right;
+    }
+    .pos {
+      background-color: #fff;
+      color: #6c6294;
+      border-radius: 3px; 
+      padding: 3px;
+      float: right;
+    }
