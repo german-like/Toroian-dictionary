@@ -16,6 +16,7 @@ function parseEntryBlock(block) {
 
   let createdAt = "";
   let headword = "";
+  let IPA = "";
   let pos = "";
   let translations = [];
   let comments = [];
@@ -41,6 +42,9 @@ function parseEntryBlock(block) {
     }
     else if (line.startsWith("-")) {
       translations.push(line.slice(1).trim());
+    }
+    else if (line.startsWith(">")) {
+      ipa.push(line.slice(1).trim());
     }
     else if (line.startsWith("C:")) {
       comments.push(line.slice(2).trim());
@@ -75,6 +79,7 @@ function parseEntryBlock(block) {
   return {
     createdAt,
     headword,
+    IPA,
     pos,
     translations,
     comments,
@@ -112,6 +117,7 @@ function renderEntry(w) {
   result.innerHTML += `
     <div class="head">
       <h2>${w.headword}</h2>
+      <div>${w.IPA}</div>
       <div class="pos">${w.pos}</div>
       <p><b>作成日：</b>${w.createdAt}</p>
     </div>
