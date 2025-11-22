@@ -1,10 +1,10 @@
 // ==========================================================
-//  パーサー（== で意味ブロック分割）
+//  パーサー（== 区切りの複数意味ブロック対応）
 // ==========================================================
 
 function parseDictionaryText(text) {
   const entries = text
-    .split(/^-{3,}$/m)  // --- 区切り
+    .split(/^-{3,}$/m)
     .map(b => b.trim())
     .filter(b => b.length > 0);
 
@@ -26,7 +26,6 @@ function parseEntryBlock(block) {
     if (!line) return;
 
     // ---- 単語全体の情報 ----
-
     if (line.startsWith("@")) {
       createdAt = line.slice(1).trim();
       return;
@@ -48,8 +47,7 @@ function parseEntryBlock(block) {
       return;
     }
 
-    // ---- == で意味ブロック開始 ----
-
+    // ---- ここから意味ブロック ----
     if (line === "==" || line === "== ") {
       current = {
         translations: [],
@@ -65,7 +63,7 @@ function parseEntryBlock(block) {
       return;
     }
 
-    // == が無くても、最初の - や C: が来たら 1 ブロック目自動生成
+    // 最初の意味ブロックが自動生成される
     if (!current && (line.startsWith("-") || line.match(/^[A-Z]:/))) {
       current = {
         translations: [],
@@ -82,8 +80,7 @@ function parseEntryBlock(block) {
 
     if (!current) return;
 
-    // ---- 意味ブロック内部 ----
-
+    // ---- Sense の内部パーツ ----
     if (line.startsWith("-")) {
       current.translations.push(line.slice(1).trim());
     }
@@ -126,9 +123,8 @@ function parseEntryBlock(block) {
   };
 }
 
-
 // ==========================================================
-//  表示処理（折り畳み対応）
+//  表示処理
 // ==========================================================
 
 let WORDS = [];
@@ -143,10 +139,7 @@ function renderEntry(w) {
   const result = document.getElementById("result");
 
   let sensesHtml = "";
-
   w.senses.forEach((s, i) => {
-    const number = i + 1;
-
     const infHtml = s.inflections.length
       ? `<table class="infl">
            <tr><th>種類</th><th>形</th></tr>
@@ -154,59 +147,51 @@ function renderEntry(w) {
          </table>`
       : "-";
 
-    const inner = `
-      <div class="sense-block">
-        <p class="htext">訳語</p>
-        ${s.translations.map(t => `<p>${t}</p>`).join("")}
+    const translationsHtml = s.translations.length
+      ? `<ul>${s.translations.map(t => `<li>${t}</li>`).join("")}</ul>`
+      : "-";
 
-        <p class="htext">語義</p>
-        ${s.comments.map(c => `<p>${c}</p>`).join("")}
+    const commentsHtml = s.comments.length
+      ? `<ul>${s.comments.map(c => `<li>${c}</li>`).join("")}</ul>`
+      : "-";
 
-        <p class="htext">例文</p>
-        ${s.examples.map(e => `<p>${e}</p>`).join("")}
+    const examplesHtml = s.examples.length
+      ? `<ul>${s.examples.map(e => `<li>${e}</li>`).join("")}</ul>`
+      : "-";
 
-        <p class="htext">変化形</p>
-        ${infHtml}
+    const synonymsText = s.synonyms.length ? s.synonyms.join(", ") : "-";
+    const antonymsText = s.antonyms.length ? s.antonyms.join(", ") : "-";
+    const tagsText = s.tags.length ? s.tags.join(", ") : "-";
 
+    sensesHtml += `
+      <div class="sense-card">
+        <h3>意味 ${i + 1}</h3>
+        <p><b>訳語:</b> ${translationsHtml}</p>
+        <p><b>語義:</b> ${commentsHtml}</p>
+        <p><b>例文:</b> ${examplesHtml}</p>
+        <p><b>変化形:</b> ${infHtml}</p>
         <p><b>備考:</b> ${s.notes || "-"}</p>
-        <p><b>類義語:</b> ${s.synonyms.join(" ") || "-"}</p>
-        <p><b>対義語:</b> ${s.antonyms.join(" ") || "-"}</p>
-        <p><b>タグ:</b> ${s.tags.join(" ") || "-"}</p>
+        <p><b>類義語:</b> ${synonymsText}</p>
+        <p><b>対義語:</b> ${antonymsText}</p>
+        <p><b>タグ:</b> ${tagsText}</p>
       </div>
     `;
-
-    if (i === 0) {
-      // 最初の意味は展開状態
-      sensesHtml += `
-        <div class="sense">
-          <h3>${number}. 基本義</h3>
-          ${inner}
-        </div>
-      `;
-    } else {
-      sensesHtml += `
-        <details class="sense">
-          <summary>${number}. ${number}</summary>
-          ${inner}
-        </details>
-      `;
-    }
   });
 
   result.innerHTML += `
-    <div class="entry">
+    <div class="word-card">
       <div class="head">
         <h2>${w.headword}</h2>
-        <div>${w.ipa}</div>
+        <div class="ipa">${w.ipa}</div>
         <div class="pos">${w.pos}</div>
-        <p><b>作成日：</b>${w.createdAt}</p>
+        <p><b>作成日:</b> ${w.createdAt}</p>
       </div>
-
-      ${sensesHtml}
+      <div class="bottom">
+        ${sensesHtml}
+      </div>
     </div>
   `;
 }
-
 
 // ==========================================================
 //  検索
@@ -224,12 +209,18 @@ function searchWord() {
 
   const matches = WORDS.filter(w =>
     w.headword.toLowerCase().includes(q) ||
-    w.senses.some(s => s.translations.some(t => t.includes(q)))
+    w.senses.some(s =>
+      s.translations.some(t => t.toLowerCase().includes(q)) ||
+      s.comments.some(c => c.toLowerCase().includes(q)) ||
+      s.examples.some(e => e.toLowerCase().includes(q)) ||
+      s.synonyms.some(syn => syn.toLowerCase().includes(q)) ||
+      s.antonyms.some(a => a.toLowerCase().includes(q)) ||
+      s.tags.some(t => t.toLowerCase().includes(q))
+    )
   );
 
   matches.forEach(renderEntry);
 }
-
 
 // ==========================================================
 //  辞書読み込み
@@ -238,4 +229,4 @@ function searchWord() {
 function loadDictionaryFromText(text) {
   WORDS = parseDictionaryText(text);
   displayAll();
-}
+      }
