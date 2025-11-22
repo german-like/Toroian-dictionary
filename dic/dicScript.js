@@ -16,7 +16,7 @@ function parseEntryBlock(block) {
 
   let createdAt = "";
   let headword = "";
-  let IPA = "";
+  let ipa = "";
   let pos = "";
   let translations = [];
   let comments = [];
@@ -79,7 +79,7 @@ function parseEntryBlock(block) {
   return {
     createdAt,
     headword,
-    IPA,
+    ipa,
     pos,
     translations,
     comments,
@@ -117,7 +117,7 @@ function renderEntry(w) {
   result.innerHTML += `
     <div class="head">
       <h2>${w.headword}</h2>
-      <div>${w.IPA}</div>
+      <div>${w.ipa}</div>
       <div class="pos">${w.pos}</div>
       <p><b>作成日：</b>${w.createdAt}</p>
     </div>
