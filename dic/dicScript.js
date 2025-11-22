@@ -1,5 +1,5 @@
 // ==========================================================
-//  パーサー（== 区切りの複数意味ブロック対応）
+//  パーサー（IPAは一行のみ対応）
 // ==========================================================
 
 function parseDictionaryText(text) {
@@ -16,22 +16,24 @@ function parseEntryBlock(block) {
 
   let createdAt = "";
   let headword = "";
-  let ipa = "";
+  let ipa = "";                 // ← 単一文字列
   let pos = "";
-
-  let senses = [];
-  let current = null;
+  let translations = [];
+  let comments = [];
+  let examples = [];
+  let inflections = [];
+  let notes = "";
+  let synonyms = [];
+  let antonyms = [];
+  let tags = [];
 
   lines.forEach(line => {
     if (!line) return;
 
-    // ---- 単語全体の情報 ----
     if (line.startsWith("@")) {
       createdAt = line.slice(1).trim();
-      return;
     }
-
-    if (line.startsWith("#")) {
+    else if (line.startsWith("#")) {
       const m = line.match(/^#(.+?)\s*\[(.+?)\]/);
       if (m) {
         headword = m[1].trim();
@@ -39,78 +41,40 @@ function parseEntryBlock(block) {
       } else {
         headword = line.slice(1).trim();
       }
-      return;
     }
-
-    if (line.startsWith(">")) {
-      ipa = line.slice(1).trim();
-      return;
+    else if (line.startsWith("-")) {
+      translations.push(line.slice(1).trim());
     }
-
-    // ---- ここから意味ブロック ----
-    if (line === "==" || line === "== ") {
-      current = {
-        translations: [],
-        comments: [],
-        examples: [],
-        inflections: [],
-        notes: "",
-        synonyms: [],
-        antonyms: [],
-        tags: []
-      };
-      senses.push(current);
-      return;
-    }
-
-    // 最初の意味ブロックが自動生成される
-    if (!current && (line.startsWith("-") || line.match(/^[A-Z]:/))) {
-      current = {
-        translations: [],
-        comments: [],
-        examples: [],
-        inflections: [],
-        notes: "",
-        synonyms: [],
-        antonyms: [],
-        tags: []
-      };
-      senses.push(current);
-    }
-
-    if (!current) return;
-
-    // ---- Sense の内部パーツ ----
-    if (line.startsWith("-")) {
-      current.translations.push(line.slice(1).trim());
+    else if (line.startsWith(">")) {
+      ipa = line.slice(1).trim();        // ← これだけ！
     }
     else if (line.startsWith("C:")) {
-      current.comments.push(line.slice(2).trim());
+      comments.push(line.slice(2).trim());
     }
     else if (line.startsWith("E:")) {
-      current.examples.push(line.slice(2).trim());
+      examples.push(line.slice(2).trim());
     }
     else if (line.startsWith("F:")) {
       const parts = line.slice(2).split(",");
       parts.forEach(part => {
         const [type, form] = part.split(":").map(s => s.trim());
-        if (type && form) current.inflections.push({ type, form });
+        if (type && form) inflections.push({ type, form });
       });
     }
     else if (line.startsWith("N:")) {
-      current.notes = line.slice(2).trim();
+      notes = line.slice(2).trim();
     }
     else if (line.startsWith("S:")) {
       const v = line.slice(2).trim();
-      if (v) current.synonyms = v.split(",").map(s => s.trim());
+      if (v) synonyms = v.split(",").map(s => s.trim());
     }
     else if (line.startsWith("A:")) {
       const v = line.slice(2).trim();
-      if (v) current.antonyms = v.split(",").map(s => s.trim());
+      if (v) antonyms = v.split(",").map(s => s.trim());
     }
     else if (line.startsWith("T:")) {
       const v = line.slice(2).trim();
-      if (v) current.tags = v.split(",").map(s => s.trim());
+      if (v) tags = v.split(",").map(s => s.trim());
     }
   });
 
@@ -119,7 +83,14 @@ function parseEntryBlock(block) {
     headword,
     ipa,
     pos,
-    senses
+    translations,
+    comments,
+    examples,
+    inflections,
+    notes,
+    synonyms,
+    antonyms,
+    tags
   };
 }
 
@@ -138,56 +109,39 @@ function displayAll() {
 function renderEntry(w) {
   const result = document.getElementById("result");
 
-  let sensesHtml = "";
-  w.senses.forEach((s, i) => {
-    const infHtml = s.inflections.length
-      ? `<table class="infl">
-           <tr><th>種類</th><th>形</th></tr>
-           ${s.inflections.map(f => `<tr><td>${f.type}</td><td>${f.form}</td></tr>`).join("")}
-         </table>`
-      : "-";
-
-    const translationsHtml = s.translations.length
-      ? `<ul>${s.translations.map(t => `<li>${t}</li>`).join("")}</ul>`
-      : "-";
-
-    const commentsHtml = s.comments.length
-      ? `<ul>${s.comments.map(c => `<li>${c}</li>`).join("")}</ul>`
-      : "-";
-
-    const examplesHtml = s.examples.length
-      ? `<ul>${s.examples.map(e => `<li>${e}</li>`).join("")}</ul>`
-      : "-";
-
-    const synonymsText = s.synonyms.length ? s.synonyms.join(", ") : "-";
-    const antonymsText = s.antonyms.length ? s.antonyms.join(", ") : "-";
-    const tagsText = s.tags.length ? s.tags.join(", ") : "-";
-
-    sensesHtml += `
-      <div class="sense-card">
-        <h3>意味 ${i + 1}</h3>
-        <p><b>訳語:</b> ${translationsHtml}</p>
-        <p><b>語義:</b> ${commentsHtml}</p>
-        <p><b>例文:</b> ${examplesHtml}</p>
-        <p><b>変化形:</b> ${infHtml}</p>
-        <p><b>備考:</b> ${s.notes || "-"}</p>
-        <p><b>類義語:</b> ${synonymsText}</p>
-        <p><b>対義語:</b> ${antonymsText}</p>
-        <p><b>タグ:</b> ${tagsText}</p>
-      </div>
-    `;
-  });
+  const infHtml = w.inflections.length
+    ? `<table class="infl">
+         <tr><th>種類</th><th>形</th></tr>
+         ${w.inflections.map(f => `<tr><td>${f.type}</td><td>${f.form}</td></tr>`).join("")}
+       </table>`
+    : "-";
 
   result.innerHTML += `
     <div class="word-card">
       <div class="head">
         <h2>${w.headword}</h2>
-        <div class="ipa">${w.ipa}</div>
+        <div class="ipa">${w.ipa}</div>      <!-- IPA 出力はここ -->
         <div class="pos">${w.pos}</div>
-        <p><b>作成日:</b> ${w.createdAt}</p>
+        <p><b>作成日：</b>${w.createdAt}</p>
       </div>
+
       <div class="bottom">
-        ${sensesHtml}
+        <p class="htext">訳語</p>
+        <div>${w.translations.map(t => `<p>${t}</p>`).join("") || "-"}</div>
+
+        <p class="htext">語義</p>
+        <div>${w.comments.map(c => `<p>${c}</p>`).join("") || "-"}</div>
+
+        <p class="htext">例文</p>
+        <div>${w.examples.map(e => `<p>${e}</p>`).join("") || "-"}</div>
+
+        <p class="htext">変化形</p>
+        <div>${infHtml}</div>
+
+        <p><b>備考：</b>${w.notes || "-"}</p>
+        <p><b>類義語：</b>${w.synonyms.join(" ") || "-"}</p>
+        <p><b>対義語：</b>${w.antonyms.join(" ") || "-"}</p>
+        <p><b>タグ：</b>${w.tags.join(" ") || "-"}</p>
       </div>
     </div>
   `;
@@ -209,24 +163,17 @@ function searchWord() {
 
   const matches = WORDS.filter(w =>
     w.headword.toLowerCase().includes(q) ||
-    w.senses.some(s =>
-      s.translations.some(t => t.toLowerCase().includes(q)) ||
-      s.comments.some(c => c.toLowerCase().includes(q)) ||
-      s.examples.some(e => e.toLowerCase().includes(q)) ||
-      s.synonyms.some(syn => syn.toLowerCase().includes(q)) ||
-      s.antonyms.some(a => a.toLowerCase().includes(q)) ||
-      s.tags.some(t => t.toLowerCase().includes(q))
-    )
+    w.translations.some(t => t.toLowerCase().includes(q))
   );
 
   matches.forEach(renderEntry);
 }
 
 // ==========================================================
-//  辞書読み込み
+//  読み込み
 // ==========================================================
 
 function loadDictionaryFromText(text) {
   WORDS = parseDictionaryText(text);
   displayAll();
-      }
+}
