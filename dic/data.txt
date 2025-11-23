@@ -46,14 +46,26 @@ S:tü
 A:
 T:代名詞
 ---
-@2025-11/21
+@2025-11/22
 #one [代名詞]
 -彼
 >/ˈone/
 C:三人称単数代名詞。
 E:
-F:主格:one,対格:enae,与格:onie,属格:onore,処格:onee,奪格:onüde,具格:onog
+F:主格:one,対格:enae,与格:onie,属格:onore,処格:onee,奪格:onüde,具格:onoge
 N:
 S:ome
+A:
+T:代名詞
+---
+@2025-11/23
+#ona [代名詞]
+-彼女
+>/ˈona/
+C:三人称単数代名詞。
+E:
+F:主格:ona,対格:enaa,与格:onia,属格:onora,処格:onea,奪格:onüda,具格:onoga
+N:
+S:oma
 A:
 T:代名詞
